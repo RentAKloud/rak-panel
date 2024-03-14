@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Usage: delete-site user domain
+
+user=$1
+domain=$2
+
+rm -rf /home/$user/conf/web/$domain /home/$user/web/$domain
+rm /etc/nginx/sites-enabled/$domain.conf
+
+nginx -s reload

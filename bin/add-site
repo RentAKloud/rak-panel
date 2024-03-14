@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Usage: add-site user domain
+
+user=$1
+domain=$2
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers
+
+check_args '2' "$#" 'USER DOMAIN [IP] [RESTART] [ALIASES] [PROXY_EXTENSIONS]'
+
+# Check if domain is valid
+is_domain_format_valid $domain
+
+# Check if user exists
+
+
+# Check if domain already exists for this user
+# what if some other user has also added same domain?
+
+
+# Create directory structure for new domain
+mkdir /home/$user/web/$domain
+mkdir /home/$user/conf/web/$domain
+mkdir /home/$user/web/$domain/{public_html,cgi_bin,document_errors}
+
+# Generate nginx conf file
+touch /home/$user/conf/web/$domain/nginx.conf
+echo "
+server {
+	server_name $domain www.$domain;
+
+	location / {
+		root /home/$user/web/$domain/public_html;
+	}
+}
+" > /home/$user/conf/web/$domain/nginx.conf
+
+# Generate link to nginx conf file in /etc/nginx/sites-enabled
+ln /home/$user/conf/web/$domain/nginx.conf /etc/nginx/sites-enabled/$domain.conf
+
+# Copy default index.html
+cp $DIR/../templates/index.html /home/$user/web/$domain/public_html/
+
+
+# Reload nginx
+nginx -s reload

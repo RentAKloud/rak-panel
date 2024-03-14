@@ -1,0 +1,7 @@
+#!/bin/bash
+# Usage: add-user username
+
+useradd -m $1
+
+mkdir /home/$1/{web,conf}
+mkdir /home/$1/conf/web
