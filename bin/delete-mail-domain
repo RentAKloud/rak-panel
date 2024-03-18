@@ -1,0 +1,14 @@
+#!/bin/bash
+
+user=$1
+domain=$2
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers
+
+check_args '2' "$#" 'USER DOMAIN'
+
+sed -i "/virtual_alias_domains/s/ $domain//" /etc/postfix/main.cf
+
+postfix reload
+

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# info: add mail domain
+# options: USER DOMAIN [ANTISPAM] [ANTIVIRUS] [DKIM] [DKIM_SIZE] [RESTART] [REJECT_SPAM]
+
+user=$1
+domain=$2
+antispam=${3-yes}
+antivirus=${4-yes}
+dkim=${5-yes}
+dkim_size=${6-2048}
+restart="$7"
+reject=${8-no}
+
+add_domain_to_postfix() {
+  # Check if the domain is already configured
+  if grep -q "^virtual_alias_domains =.*$domain" /etc/postfix/main.cf; then
+      echo "Domain $domain is already configured in Postfix."
+      return 1
+  fi
+
+  # Add domain to virtual_alias_domains in main.cf
+  echo "Adding domain $domain to Postfix configuration..."
+  sed -i "/virtual_alias_domains/s/$/ $domain/" /etc/postfix/main.cf
+
+  postfix reload
+
+  echo "Domain $domain has been added to Postfix."
+}
+
+# Check if domain argument is provided
+if [ $# -ne 2 ]; then
+  echo "Usage: $0 <user> <domain>"
+  exit 1
+fi
+
+add_domain_to_postfix "$1"

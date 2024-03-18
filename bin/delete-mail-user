@@ -1,0 +1,15 @@
+#!/bin/bash
+
+user=$1
+email=$2
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers
+
+check_args '2' "$#" 'USER DOMAIN'
+
+sed -i "/$email  $user/d" /etc/postfix/virtual
+
+# Update Postfix lookup table
+postmap /etc/postfix/virtual
+

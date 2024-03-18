@@ -1,0 +1,12 @@
+#!/bin/bash
+
+user=$1
+email=$2
+
+# Check if user and domain are valid
+
+# Append to virtual file and
+echo "$email  $user" >> /etc/postfix/virtual
+
+# Update Postfix lookup table
+postmap /etc/postfix/virtual
