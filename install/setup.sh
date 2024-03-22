@@ -16,6 +16,7 @@ http://nginx.org/packages/debian `lsb_release -cs` nginx" \
 echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
   | sudo tee /etc/apt/preferences.d/99nginx
 
+# Install packages
 apt update
 apt upgrade
 apt install nginx \
@@ -26,6 +27,11 @@ apt install nginx \
 # Copy config files with proper values
 cat $DIR/../templates/main.cf | sed "s/<FQDN>/$fqdn/g" > /etc/postfix/main.cf
 cp $DIR/../templates/nginx.default.conf /etc/nginx/sites-available/default # This will also change the link in /sites-enabled
+
+cp $DIR/../templates/dovecot/dovecot.conf /etc/dovecot/
+cp $DIR/../templates/dovecot/10-auth.conf /etc/dovecot/conf.d/
+cp $DIR/../templates/dovecot/10-mail.conf /etc/dovecot/conf.d/
+cp $DIR/../templates/dovecot/10-master.conf /etc/dovecot/conf.d/
 
 # Setup RoundCube web mail client
 curl -L -O https://github.com/roundcube/roundcubemail/releases/download/1.6.6/roundcubemail-1.6.6-complete.tar.gz
