@@ -4,7 +4,7 @@ user=$1
 email=$2
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $DIR/../lib/helpers
+source $DIR/../lib/helpers.sh
 
 check_args '2' "$#" 'USER DOMAIN'
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+user=$1
+database=$2
+dbuser=$3
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+source $DIR/../lib/db.sh
+
+check_args '3' "$#" 'USER DBNAME DBUSER'
+
+mysql_query "CREATE DATABASE \`$database\`"
+check_result $? "Unable to create database $database"
+
+mysql_query "GRANT ALL ON \`$database\`.* TO \`$dbuser\`@\`%\`"
+check_result $? "Could not assign permissions on $database to $dbuser"
+

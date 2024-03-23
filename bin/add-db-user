@@ -1,0 +1,15 @@
+#!/bin/bash
+
+user=$1
+dbuser=$2
+password=$3
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+source $DIR/../lib/db.sh
+
+check_args '3' "$#" 'USER USERNAME PASSWORD'
+
+mysql_query "CREATE USER $dbuser IDENTIFIED BY '$password'"
+check_result $? "Unable to create user $dbuser"
+
