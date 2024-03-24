@@ -13,6 +13,6 @@ check_args '3' "$#" 'USER DBNAME DBUSER'
 mysql_query "CREATE DATABASE \`$database\`"
 check_result $? "Unable to create database $database"
 
-mysql_query "GRANT ALL ON \`$database\`.* TO \`$dbuser\`@\`%\`"
+mysql_query "GRANT ALL PRIVILEGES ON \`$database\`.* TO \`$dbuser\`@\`localhost\`"
 check_result $? "Could not assign permissions on $database to $dbuser"
 

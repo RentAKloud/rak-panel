@@ -42,6 +42,8 @@ mkdir /var/www/roundcube
 tar -xf roundcubemail-1.6.6-complete.tar.gz -C /var/www/roundcube -v --strip-components=1
 rm roundcubemail-1.6.6-complete.tar.gz
 
+# TODO set proper file permissions
+
 # Setup phpMyAdmin
 curl -O https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
 unzip phpMyAdmin-5.2.1-all-languages.zip -d /var/www/

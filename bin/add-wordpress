@@ -1,0 +1,29 @@
+#!/bin/bash
+
+user=$1
+domain=$2
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+
+check_args '2' "$#" 'USER DOMAIN'
+
+# Create database
+dbuser="$user"_"wp${RANDOM:0:6}"
+dbpass=$dbuser
+dbname=$dbuser
+
+./add-db-user $user $dbuser $dbpass
+./add-db $user $dbname $dbuser
+
+echo $dbuser
+
+# Create site
+./add-site $user $domain
+
+# Download lateset WordPress
+curl -O https://wordpress.org/latest.zip
+unzip latest.zip -d /home/$user/web/$domain/public_html
+mv /home/$user/web/$domain/public_html/wordpress/* /home/$user/web/$domain/public_html
+rm -rf /home/$user/web/$domain/public_html/wordpress
+rm latest.zip

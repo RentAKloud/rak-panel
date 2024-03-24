@@ -25,6 +25,8 @@ mkdir /home/$user/web/$domain
 mkdir /home/$user/conf/web/$domain
 mkdir /home/$user/web/$domain/{public_html,cgi_bin,document_errors}
 
+# TODO set proper file permissions
+
 # Generate nginx conf file
 touch /home/$user/conf/web/$domain/nginx.conf
 cat $DIR/../templates/nginx.conf | \
