@@ -10,6 +10,6 @@ source $DIR/../lib/db.sh
 
 check_args '3' "$#" 'USER USERNAME PASSWORD'
 
-mysql_query "CREATE USER $dbuser IDENTIFIED BY '$password'"
+mysql_query "CREATE USER $dbuser@localhost IDENTIFIED BY '$password'"
 check_result $? "Unable to create user $dbuser"
 

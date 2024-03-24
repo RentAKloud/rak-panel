@@ -3,6 +3,9 @@
 fqdn=$1
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+
+check_args '1' "$#" 'FQDN'
 
 # Setup APT repo keys
 curl -o /etc/apt/keyrings/mariadb-keyring.pgp 'https://mariadb.org/mariadb_release_signing_key.pgp'
@@ -38,3 +41,9 @@ curl -L -O https://github.com/roundcube/roundcubemail/releases/download/1.6.6/ro
 mkdir /var/www/roundcube
 tar -xf roundcubemail-1.6.6-complete.tar.gz -C /var/www/roundcube -v --strip-components=1
 rm roundcubemail-1.6.6-complete.tar.gz
+
+# Setup phpMyAdmin
+curl -O https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
+unzip phpMyAdmin-5.2.1-all-languages.zip -d /var/www/
+mv /var/www/phpMyAdmin-5.2.1-all-languages /var/www/phpmyadmin
+rm phpMyAdmin-5.2.1-all-languages.zip
