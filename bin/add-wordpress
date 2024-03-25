@@ -13,13 +13,13 @@ dbuser="$user"_"wp${RANDOM:0:6}"
 dbpass=$dbuser
 dbname=$dbuser
 
-./add-db-user $user $dbuser $dbpass
-./add-db $user $dbname $dbuser
+add-db-user $user $dbuser $dbpass
+add-db $user $dbname $dbuser
 
 echo $dbuser
 
 # Create site
-./add-site $user $domain
+add-site $user $domain
 
 # Download lateset WordPress
 curl -O https://wordpress.org/latest.zip
