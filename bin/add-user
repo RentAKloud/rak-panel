@@ -1,7 +1,20 @@
 #!/bin/bash
 # Usage: add-user username
 
-useradd -m $1
+username=$1
 
-mkdir /home/$1/{web,conf}
-mkdir /home/$1/conf/web
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+
+check_args '1' "$#" 'USERNAME'
+
+useradd -m $username
+
+mkdir /home/$username/{web,conf}
+mkdir /home/$username/conf/web
+
+# Generate PHP-FPM pool for this user
+cp $DIR/../templates/fpm-user-pool.conf /etc/php/8.3/fpm/pool.d/fpm-$username.conf
+sed -i "s/<USER>/$username/g" /etc/php/8.3/fpm/pool.d/fpm-$username.conf
+
+systemctl restart php8.3-fpm

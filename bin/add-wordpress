@@ -27,3 +27,5 @@ unzip latest.zip -d /home/$user/web/$domain/public_html
 mv /home/$user/web/$domain/public_html/wordpress/* /home/$user/web/$domain/public_html
 rm -rf /home/$user/web/$domain/public_html/wordpress
 rm latest.zip
+
+chmod -R $user:$user /home/$user/web/$domain/public_html/

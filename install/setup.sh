@@ -52,14 +52,16 @@ mkdir /var/www/roundcube
 tar -xf roundcubemail-1.6.6-complete.tar.gz -C /var/www/roundcube --strip-components=1
 rm roundcubemail-1.6.6-complete.tar.gz
 
-# TODO set proper file permissions
-
 # Setup phpMyAdmin
 echo "###  Installing phpMyAdmin  ###"
 curl -O https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
 unzip -q phpMyAdmin-5.2.1-all-languages.zip -d /var/www/
 mv /var/www/phpMyAdmin-5.2.1-all-languages /var/www/phpmyadmin
 rm phpMyAdmin-5.2.1-all-languages.zip
+
+# Set proper file permissions/ownerships
+chown -R www-data:www-data /var/www/roundcube
+chown -R www-data:www-data /var/www/phpmyadmin
 
 # Add bin directory to PATH
 echo "export PATH=\$PATH:$DIR/../bin" >> ~/.bashrc
