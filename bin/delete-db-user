@@ -1,7 +1,7 @@
 #!/bin/bash
 
 user=$1
-dbuser=$2
+dbuser=$2@localhost
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/../lib/helpers.sh
