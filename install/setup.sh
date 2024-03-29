@@ -24,14 +24,20 @@ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sou
 # Install packages
 apt update
 apt upgrade
-apt install nginx \
+apt install \
+  curl rsyslog \
+  nginx \
   postfix dovecot-pop3d dovecot-imapd opendkim opendkim-tools \
   php8.3-fpm php8.3-mbstring php8.3-mysql php8.3-xml php8.3-intl php8.3-curl php8.3-ldap php8.3-gd php8.3-imagick php8.3-zip \
   mariadb-server
 
 # Copy config files with proper values
+## Postfix
 cat $DIR/../templates/main.cf | sed "s/<FQDN>/$fqdn/g" > /etc/postfix/main.cf
 
+postfix reload
+
+## nginx
 mkdir /etc/nginx/sites-available # This is not always created depending on the distro
 cp $DIR/../templates/nginx/nginx.default.conf /etc/nginx/sites-available/default # This will also change the link in /sites-enabled
 
@@ -40,10 +46,15 @@ cp $DIR/../templates/nginx/fastcgi.conf /etc/nginx/
 mkdir /etc/nginx/snippets
 cp $DIR/../templates/nginx/fastcgi-php.conf /etc/nginx/snippets
 
+nginx -s reload
+
+## Dovecot
 cp $DIR/../templates/dovecot/dovecot.conf /etc/dovecot/
 cp $DIR/../templates/dovecot/10-auth.conf /etc/dovecot/conf.d/
 cp $DIR/../templates/dovecot/10-mail.conf /etc/dovecot/conf.d/
 cp $DIR/../templates/dovecot/10-master.conf /etc/dovecot/conf.d/
+
+systemctl reload dovecot
 
 # Setup RoundCube web mail client
 echo "###  Install RoundCube  ###"
