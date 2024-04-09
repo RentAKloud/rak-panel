@@ -16,3 +16,19 @@ Enter you password, then
 use <database-name>;
 source out.sql;
 ```
+
+## Useful Commands
+
+```
+openssl s_client -connect localhost:25 -servername <DOMAIN> -starttls smtp
+```
+
+## Troubleshooting
+
+### mysqli::real_connect(): (HY000/2054): Server sent charset (0) unknown to the client. Please, report to the developers
+
+This error occurs in some versions of mariadb. To fix, comment out the following line in `/etc/mysql/mariadb.conf.d/50-server.cnf`
+
+```
+character-set-collations = utf8mb4=uca1400_ai_ci
+```

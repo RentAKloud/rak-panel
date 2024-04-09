@@ -24,13 +24,15 @@ compatibility_level = 3.6
 
 
 # TLS parameters
-smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_cert_file=/etc/letsencrypt/live/<FQDN>/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/<FQDN>/privkey.pem
 smtpd_tls_security_level=may
 
 smtp_tls_CApath=/etc/ssl/certs
 smtp_tls_security_level=may
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+tls_server_sni_maps = hash:/etc/postfix/vmail_ssl.map
 
 
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
@@ -38,7 +40,7 @@ myhostname = <FQDN>
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 myorigin = /etc/mailname
-mydestination = $myhostname, <FQDN>
+mydestination = $myhostname, localhost
 relayhost =
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
 mailbox_size_limit = 0
@@ -47,8 +49,29 @@ inet_interfaces = all
 inet_protocols = all
 
 # Hosted domains
-virtual_alias_domains =
-virtual_alias_maps = hash:/etc/postfix/virtual
+virtual_mailbox_domains = 
+virtual_mailbox_base = /home/vmail
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_minimum_uid = 100
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+
+#virtual_alias_domains =
+#virtual_alias_maps = hash:/etc/postfix/virtual
 
 # Use Maildir (separate files per email) instead of Mbox
-home_mailbox=mail/
+#home_mailbox=mail/
+
+smtpd_recipient_restrictions = permit_sasl_authenticated permit_mynetworks reject_unauth_destination
+smtpd_helo_required = yes
+smtpd_helo_restrictions =
+  permit_mynetworks,
+  permit_sasl_authenticated,
+  reject_invalid_helo_hostname,
+  reject_non_fqdn_helo_hostname,
+  reject_unknown_helo_hostname,
+  check_helo_access hash:/etc/postfix/helo_access
+
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
