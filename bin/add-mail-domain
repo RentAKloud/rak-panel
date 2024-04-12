@@ -14,18 +14,24 @@ reject=${8-no}
 
 add_domain_to_postfix() {
   # Check if the domain is already configured
-  if grep -q "^virtual_alias_domains =.*$domain" /etc/postfix/main.cf; then
+  # if grep -q "^virtual_mailbox_domains =.*$domain" /etc/postfix/main.cf; then
+  if grep -q "$domain" /etc/postfix/vmailbox_domains; then
       echo "Domain $domain is already configured in Postfix."
       return 1
   fi
 
-  # Add domain to virtual_alias_domains in main.cf
+  # Add domain to virtual mailbox domains list
   echo "Adding domain $domain to Postfix configuration..."
-  sed -i "/virtual_alias_domains/s/$/ $domain/" /etc/postfix/main.cf
+  echo $domain >> /etc/postfix/vmailbox_domains
 
   postfix reload
 
   echo "Domain $domain has been added to Postfix."
+}
+
+# Needed for SSL
+add_domain_to_dovecot() {
+
 }
 
 # Check if domain argument is provided

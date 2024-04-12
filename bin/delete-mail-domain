@@ -8,7 +8,13 @@ source $DIR/../lib/helpers.sh
 
 check_args '2' "$#" 'USER DOMAIN'
 
-sed -i "/virtual_alias_domains/s/ $domain//" /etc/postfix/main.cf
+sed -i "/$domain/d" /etc/postfix/vmailbox_domains
 
-postfix reload
+# Delete all associated addresses
+## Postfix
+sed -i "/$domain/d" /etc/postfix/vmailbox
+## Dovecot
+sed -i "/$domain/d" /etc/dovecot/passwd
+
+postmap /etc/postfix/vmailbox
 

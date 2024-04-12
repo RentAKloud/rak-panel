@@ -36,6 +36,7 @@ debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Si
 apt install --assume-yes \
   nginx \
   postfix opendkim opendkim-tools \
+  dovecot-core dovecot-pop3d dovecot-imapd \
   php8.3-fpm php8.3-mbstring php8.3-mysql php8.3-xml php8.3-intl php8.3-curl php8.3-ldap php8.3-gd php8.3-imagick php8.3-zip \
   mariadb-server
 
@@ -43,10 +44,9 @@ apt install --assume-yes \
 ## Postfix
 cat $DIR/../templates/postfix/main.cf | sed "s/<FQDN>/$fqdn/g" > /etc/postfix/main.cf
 
-postfix reload
+### TODO: Create vmail user
 
-# Now install dovecot
-apt install dovecot-core dovecot-pop3d dovecot-imapd
+postfix reload
 
 ## nginx
 mkdir /etc/nginx/sites-enabled # This is not always created depending on the distro

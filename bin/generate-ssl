@@ -1,0 +1,20 @@
+#!/bin/bash
+
+user=$1
+domain=$2
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+
+check_args '2' "$#" 'USER DOMAIN'
+
+certbot certonly --webroot \
+  -w /home/$user/web/$domain/public_html \
+  -d $domain,www.$domain \
+  -n \
+  --agree-tos --email ssl@rentakloud.com
+
+# Add to Postfix
+
+
+# Add to Dovecot

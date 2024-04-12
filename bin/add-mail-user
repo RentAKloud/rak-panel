@@ -1,12 +1,25 @@
 #!/bin/bash
 
 user=$1
-email=$2
+domain=$2
+username=$3
+password=$4
+email="$username@$domain"
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $DIR/../lib/helpers.sh
+
+check_args '4' "$#" 'USER DOMAIN USERNAME PASSWORD'
 
 # Check if user and domain are valid
 
-# Append to virtual file and
-echo "$email  $user" >> /etc/postfix/virtual
-
+# Append to virtual mailbox file and
+echo "$email  $domain/$username/" >> /etc/postfix/vmailbox
 # Update Postfix lookup table
-postmap /etc/postfix/virtual
+postmap /etc/postfix/vmailbox
+
+# Hash the passwd
+hash=$(doveadm pw -p $password)
+
+# Append to Dovecot's passwd file
+echo "$email:$hash::::::" >> /etc/dovecot/passwd

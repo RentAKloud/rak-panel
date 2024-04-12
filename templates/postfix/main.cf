@@ -49,7 +49,7 @@ inet_interfaces = all
 inet_protocols = all
 
 # Hosted domains
-virtual_mailbox_domains = 
+virtual_mailbox_domains = /etc/postfix/vmailbox_domains
 virtual_mailbox_base = /home/vmail
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_minimum_uid = 100

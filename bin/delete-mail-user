@@ -1,15 +1,21 @@
 #!/bin/bash
 
 user=$1
-email=$2
+domain=$2
+username=$3
+email="$username@$domain"
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/../lib/helpers.sh
 
-check_args '2' "$#" 'USER DOMAIN'
+check_args '3' "$#" 'USER DOMAIN USERNAME'
 
-sed -i "/$email  $user/d" /etc/postfix/virtual
+# Delete from Postfix
+sed -i "/^$email/d" /etc/postfix/vmailbox
 
 # Update Postfix lookup table
-postmap /etc/postfix/virtual
+postmap /etc/postfix/vmailbox
+
+# Delete from Dovecot passwd file
+sed -i "/^$email/d" /etc/dovecot/passwd
 
