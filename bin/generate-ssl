@@ -14,6 +14,12 @@ certbot certonly --webroot \
   -n \
   --agree-tos --email ssl@rentakloud.com
 
+check_result $? "Unable to generate SSL certificates"
+
+# Add to nginx
+sed -i "s/# ssl_/ssl_/g" /home/$user/conf/web/$domain/nginx.conf
+nginx -s reload
+
 # Add to Postfix
 
 

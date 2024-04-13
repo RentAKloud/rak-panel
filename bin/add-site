@@ -45,3 +45,6 @@ chown -R $user:$user /home/$user/web/$domain/public_html
 
 # Reload nginx
 nginx -s reload
+
+# Generate SSL?
+generate-ssl $user $domain
