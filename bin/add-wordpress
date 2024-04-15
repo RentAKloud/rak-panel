@@ -16,16 +16,29 @@ dbname=$dbuser
 add-db-user $user $dbuser $dbpass
 add-db $user $dbname $dbuser
 
-echo $dbuser
+echo "DB name/username/password: $dbuser"
 
 # Create site
 add-site $user $domain
+base_path=/home/$user/web/$domain/public_html
 
 # Download lateset WordPress
 curl -O https://wordpress.org/latest.zip
-unzip -q latest.zip -d /home/$user/web/$domain/public_html
-mv /home/$user/web/$domain/public_html/wordpress/* /home/$user/web/$domain/public_html
-rm -rf /home/$user/web/$domain/public_html/wordpress
-rm latest.zip /home/$user/web/$domain/public_html/index.html
+unzip -q latest.zip -d $base_path
+mv $base_path/wordpress/* $base_path
+rm -rf $base_path/wordpress
+rm latest.zip $base_path/index.html
 
-chown -R $user:$user /home/$user/web/$domain/public_html/
+chown -R $user:$user $base_path/
+
+# Configure wp-config.php
+mv $base_path/wp-config-sample.php $base_path/wp-config.php
+sed -i "s/database_name_here/$dbname/; s/username_here/$dbuser/; s/password_here/$dbpass/" $base_path/wp-config.php
+
+saltsfile=$(mktemp)
+curl https://api.wordpress.org/secret-key/1.1/salt/ > $saltsfile
+# To generate your own keys/salt:
+# - openssl rand 64 | base64
+# - cat /dev/urandom | base64 | head -c 64
+sed -i "51,58d; 51 r $saltsfile" $base_path/wp-config.php
+rm $saltsfile

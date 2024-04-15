@@ -1,9 +1,14 @@
+## Hierarchy
+
+The primary customer is known as user, and for each user a Linux system user is create with a home directory. For each user, we create a separate PHP FPM pool.
+
+Mails are organized per domain, in `/home/vmail`. IMAP/POP3 logins are managed by Dovecot (See `/etc/dovecot/conf.d/auth-passwdfile.conf.ext`)
 
 ## Transferring a WordPress site
 
 1. Copy all WordPress files to public_html of your domain.
 2. Create a database user and a database. Set the info in wp-config.php
-3. To export source database, use `mysqldump <database-name > out.sql`
+3. To export source database, use `mysqldump DATABASE_NAME > out.sql`
 4. To import the dump,
 
 ```

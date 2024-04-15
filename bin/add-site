@@ -32,7 +32,8 @@ cat $DIR/../templates/nginx/new-site.conf | \
 	/home/$user/conf/web/$domain/nginx.conf
 
 # Generate link to nginx conf file in /etc/nginx/sites-enabled
-ln /home/$user/conf/web/$domain/nginx.conf /etc/nginx/sites-enabled/$domain.conf
+# -s makes it a soft/symbolic link. We use it because `sed -i` doesn't works with hard links
+ln -s /home/$user/conf/web/$domain/nginx.conf /etc/nginx/sites-enabled/$domain.conf
 
 # Copy default index.html
 cp $DIR/../templates/index.html /home/$user/web/$domain/public_html/
