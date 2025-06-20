@@ -1,0 +1,45 @@
+[
+  {
+    "component": "raw:components/drawer-layout.html",
+    "slots": [
+      {
+        "key": "navbar",
+        "component": "raw:components/navbar.html"
+      },
+      {
+        "key": "sidebar",
+        "component": "raw:components/sidebar.html"
+      }
+    ],
+    "children": [
+      {
+        "ele": "div",
+        "attrs": { "class": "p-10 space-y-2" },
+        "children": [
+          {
+            "ele": "h3",
+            "attrs": { "class": "font-bold" },
+            "content": "Websites"
+          },
+          {
+            "ele": "input",
+            "attrs": {
+              "class": "input mb-4",
+              "placeholder": "Search by domain, email or name"
+            }
+          },
+          {
+            "loop": true,
+            "data": [
+              { "domain": "rentakloud.com" },
+              { "domain": "example.com" },
+              { "domain": "johndoe.org" }
+            ],
+            "fetch": "/websites",
+            "content": "raw:components/website-list-item.html"
+          }
+        ]
+      }
+    ]
+  }
+]

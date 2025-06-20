@@ -1,0 +1,36 @@
+[
+  {
+    "component": "raw:components/drawer-layout.html",
+    "slots": [
+      {
+        "key": "navbar",
+        "component": "raw:components/navbar.html"
+      },
+      {
+        "key": "sidebar",
+        "component": "raw:components/sidebar.html"
+      }
+    ],
+    "children": [
+      {
+        "component": "raw:components/form.html"
+      },
+      {
+        "ele": "div",
+        "attrs": [
+          {
+            "class": "bg-pink-300 border-2 p-4"
+          }
+        ],
+        "children": [
+          {
+            "ele": "input",
+            "attrs": {
+              "placeholder": "example input"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
