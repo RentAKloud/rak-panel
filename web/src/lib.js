@@ -2,44 +2,66 @@ export function router(routes, root) {
   document.addEventListener("click", (e) => {
     if (e.target.nodeName === "A") {
       e.preventDefault();
-      history.pushState({}, "", e.target.attributes["href"].value);
-      // location.pathname = e.target.attributes["href"].value; // causes page reload
 
-      renderRoute(routes, root);
+      const url = e.target.attributes["href"]?.value;
+      if (url) {
+        const [route, params] = findRoute(routes, url);
+        history.pushState({ params }, "", url);
+        // location.pathname = e.target.attributes["href"].value; // causes page reload
+
+        renderRoute(route, root);
+      }
     }
   });
 
   // executes for both back and forward
   window.addEventListener("popstate", function (e) {
-    renderRoute(routes, root);
+    const [route] = findRoute(routes);
+    renderRoute(route, root);
   });
 
-  renderRoute(routes, root);
+  const [route] = findRoute(routes);
+  renderRoute(route, root);
 }
 
-async function renderRoute(routes, root) {
-  root = document.querySelector(root);
-  const path = location.pathname;
+function findRoute(routes, target = location.pathname) {
+  let params = {};
 
   const route = routes.find((r) => {
     const regx = new RegExp(r.path.replaceAll(/:.*\/?/g, "(.*)"));
-    const matches = path.match(regx);
-    console.log(r.path, matches);
-    if (matches && matches[0] === path) {
+    const matches = target.match(regx);
+
+    if (matches && matches[0] === target) {
+      r.path
+        .match(/:([a-z0-9]*)/gi)
+        ?.map((p) => p.replace(":", ""))
+        .forEach((param, i) => {
+          params[param] = matches[i + 1];
+        });
       return true;
     }
     return false;
   });
 
+  return [route, params];
+}
+
+async function renderRoute(route, root) {
+  root = document.querySelector(root);
+
   if (route) {
     if (route.component) {
-      const html = await jsonToHtml(await route.component());
+      const { html, scripts } = await jsonToHtml(await route.component());
       root.innerHTML = html;
+
+      if (scripts) {
+        eval(scripts);
+      }
     } else {
       root.innerHTML = route.html;
     }
   } else {
-    const html = await jsonToHtml(
+    const { html } = await jsonToHtml(
       await routes.find((r) => r.path === "404").component(),
     );
     root.innerHTML = html;
@@ -53,6 +75,7 @@ async function renderRoute(routes, root) {
 
 async function jsonToHtml(json) {
   let result = "";
+  let _scripts = "";
 
   for (const node of json) {
     if (node.component) {
@@ -69,10 +92,14 @@ async function jsonToHtml(json) {
       }
 
       if (node.children) {
-        result = result.replace("{children}", await jsonToHtml(node.children));
+        const { html, scripts } = await jsonToHtml(node.children);
+        _scripts += scripts;
+        result = result.replace("{children}", html);
       }
     } else if (node.ele) {
-      const childrenHtml = node.children ? await jsonToHtml(node.children) : "";
+      const childrenHtml = node.children
+        ? (await jsonToHtml(node.children)).html
+        : "";
       result += `<${node.ele} ${Object.keys(node.attrs || [])
         .map((key) => `${key}="${node.attrs[key]}"`)
         .join(" ")}>${node.content || childrenHtml}</${node.ele}>`;
@@ -89,7 +116,11 @@ async function jsonToHtml(json) {
 
       result += content.join("");
     }
+
+    if (node.script) {
+      _scripts += node.script;
+    }
   }
 
-  return result;
+  return { html: result, scripts: _scripts };
 }

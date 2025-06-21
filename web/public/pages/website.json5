@@ -1,0 +1,23 @@
+[
+  {
+    "component": "raw:components/drawer-layout.html",
+    "slots": [
+      {
+        "key": "navbar",
+        "component": "raw:components/navbar.html"
+      },
+      {
+        "key": "sidebar",
+        "component": "raw:components/sidebar.html"
+      }
+    ],
+    "children": [
+      {
+        "ele": "div",
+        attrs: {class: "p-8 h-full"},
+        "content": "raw:components/website.html",
+        "script": 'raw:components/website.js'
+      }
+    ]
+  }
+]

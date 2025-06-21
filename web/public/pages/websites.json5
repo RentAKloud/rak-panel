@@ -22,18 +22,42 @@
             "content": "Websites"
           },
           {
-            "ele": "input",
+            "ele": "div",
             "attrs": {
-              "class": "input mb-4",
-              "placeholder": "Search by domain, email or name"
-            }
+              "class": "flex justify-between",
+            },
+            "children": [
+              {
+                "ele": "input",
+                "attrs": {
+                  "class": "input mb-4",
+                  "id": "search",
+                  "placeholder": "Search by domain, email or name",
+                  "oninput": " \
+                    javascript:document.querySelectorAll('.website').forEach(w => { \
+                      if (w.dataset['filter'].includes(this.value)) { \
+                        w.classList.remove('hidden') \
+                      } else { w.classList.add('hidden') } \
+                    })"
+                }
+              },
+              {
+                "ele": "a",
+                "attrs": {
+                  "class": "btn btn-primary",
+                  "href": "/websites/new",
+                },
+                "content": "+ Add Website"
+              },
+            ]
           },
           {
             "loop": true,
             "data": [
               { "domain": "rentakloud.com" },
               { "domain": "example.com" },
-              { "domain": "johndoe.org" }
+              { "domain": "johndoe.org" },
+              { "domain": "erp.rentakloud.com" }
             ],
             "fetch": "/websites",
             "content": "raw:components/website-list-item.html"

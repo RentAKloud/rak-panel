@@ -8,6 +8,10 @@ export default [
     component: () => fetch("/pages/websites.json").then((res) => res.json()),
   },
   {
+    path: "/websites/new",
+    component: () => fetch("/pages/website-new.json").then((res) => res.json()),
+  },
+  {
     path: "/websites/:domain",
     component: () => fetch("/pages/website.json").then((res) => res.json()),
   },
