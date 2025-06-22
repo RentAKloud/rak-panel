@@ -1,0 +1,69 @@
+[
+  {
+    "component": "raw:components/drawer-layout.html",
+    "slots": [
+      {
+        "key": "navbar",
+        "component": "raw:components/navbar.html"
+      },
+      {
+        "key": "sidebar",
+        "component": "raw:components/sidebar.html"
+      }
+    ],
+    "children": [
+      {
+        "ele": "div",
+        "attrs": { "class": "p-10 space-y-2" },
+        "children": [
+          {
+            "ele": "h3",
+            "attrs": { "class": "font-bold" },
+            "content": "Databases"
+          },
+          {
+            "ele": "div",
+            "attrs": {
+              "class": "flex justify-between",
+            },
+            "children": [
+              {
+                "ele": "input",
+                "attrs": {
+                  "class": "input mb-4",
+                  "id": "search",
+                  "placeholder": "Search by domain, email or name",
+                  "oninput": " \
+                    javascript:document.querySelectorAll('.website').forEach(w => { \
+                      if (w.dataset['filter'].includes(this.value)) { \
+                        w.classList.remove('hidden') \
+                      } else { w.classList.add('hidden') } \
+                    })"
+                }
+              },
+              {
+                "ele": "a",
+                "attrs": {
+                  "class": "btn btn-primary",
+                  "href": "/databases/new",
+                },
+                "content": "+ Add Database"
+              },
+            ]
+          },
+          {
+            "loop": true,
+            "data": [
+              { "domain": "mysql-db1" },
+              { "domain": "mariadb2" },
+              { "domain": "wp0123456" },
+              { "domain": "test_db_1" }
+            ],
+            "fetch": "/websites",
+            "content": "raw:components/website-list-item.html"
+          }
+        ]
+      }
+    ]
+  }
+]

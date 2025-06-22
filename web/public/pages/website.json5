@@ -14,7 +14,7 @@
     "children": [
       {
         "ele": "div",
-        attrs: {class: "p-8 h-full"},
+        attrs: {class: "p-10 h-full"},
         "content": "raw:components/website.html",
         "script": 'raw:components/website.js'
       }

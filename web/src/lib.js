@@ -1,4 +1,6 @@
 export function router(routes, root) {
+  const notFound = routes.find((r) => r.path === "404");
+
   document.addEventListener("click", (e) => {
     if (e.target.nodeName === "A") {
       e.preventDefault();
@@ -9,7 +11,7 @@ export function router(routes, root) {
         history.pushState({ params }, "", url);
         // location.pathname = e.target.attributes["href"].value; // causes page reload
 
-        renderRoute(route, root);
+        renderRoute(route, root, notFound);
       }
     }
   });
@@ -17,23 +19,23 @@ export function router(routes, root) {
   // executes for both back and forward
   window.addEventListener("popstate", function (e) {
     const [route] = findRoute(routes);
-    renderRoute(route, root);
+    renderRoute(route, root, notFound);
   });
 
   const [route] = findRoute(routes);
-  renderRoute(route, root);
+  renderRoute(route, root, notFound);
 }
 
 function findRoute(routes, target = location.pathname) {
   let params = {};
 
   const route = routes.find((r) => {
-    const regx = new RegExp(r.path.replaceAll(/:.*\/?/g, "(.*)"));
+    const regx = new RegExp(r.path.replaceAll(/:[^\/]*/g, "([^\/]*)"));
     const matches = target.match(regx);
 
     if (matches && matches[0] === target) {
       r.path
-        .match(/:([a-z0-9]*)/gi)
+        .match(/:([^\/]*)/gi)
         ?.map((p) => p.replace(":", ""))
         .forEach((param, i) => {
           params[param] = matches[i + 1];
@@ -46,7 +48,7 @@ function findRoute(routes, target = location.pathname) {
   return [route, params];
 }
 
-async function renderRoute(route, root) {
+async function renderRoute(route, root, notFoundRoute) {
   root = document.querySelector(root);
 
   if (route) {
@@ -61,9 +63,7 @@ async function renderRoute(route, root) {
       root.innerHTML = route.html;
     }
   } else {
-    const { html } = await jsonToHtml(
-      await routes.find((r) => r.path === "404").component(),
-    );
+    const { html } = await jsonToHtml(await notFoundRoute.component());
     root.innerHTML = html;
   }
 

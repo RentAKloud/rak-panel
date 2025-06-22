@@ -73,17 +73,17 @@ export default defineConfig({
             ) {
               let content = await readFile(fullPath, "utf-8");
 
-              content = content.replace(/"raw:(.*?)"/g, (_, filePath) => {
-                const fullPath = path.join("src", filePath);
-                const fileContent = fs.readFileSync(fullPath, "utf-8");
-                return JSON.stringify(fileContent);
-              });
-
               // convert JSON5 to standard JSON
               if (fullPath.includes(".json5")) {
                 fullPath = fullPath.replace(".json5", ".json");
                 content = JSON.stringify(JSON5.parse(content), null, 2);
               }
+
+              content = content.replace(/"raw:(.*?)"/g, (_, filePath) => {
+                const fullPath = path.join("src", filePath);
+                const fileContent = fs.readFileSync(fullPath, "utf-8");
+                return JSON.stringify(fileContent);
+              });
 
               const outputPath = path.join(
                 "dist",

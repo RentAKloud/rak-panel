@@ -16,6 +16,10 @@ export default [
     component: () => fetch("/pages/website.json").then((res) => res.json()),
   },
   {
+    path: "/websites/:domain/databases",
+    component: () => fetch("/pages/databases.json").then((res) => res.json()),
+  },
+  {
     path: "/domains",
     component: () => fetch("/pages/domains.json").then((res) => res.json()),
   },

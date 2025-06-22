@@ -1,0 +1,57 @@
+<div class="space-y-4">
+  <h3 class="font-bold text-2xl">New Website</h3>
+
+  <div class="bg-base-200 p-6">
+    <form class="space-y-10">
+      <div class="space-y-4">
+        <label class="floating-label">
+          <span>Domain</span>
+          <input
+            name="domain"
+            class="input input-lg"
+            placeholder="example.com"
+          />
+        </label>
+
+        <label class="label">
+          <input type="checkbox" class="checkbox checkbox-primary" />
+          Use temporary domain
+        </label>
+      </div>
+
+      <label class="floating-label">
+        <span>Template</span>
+        <select name="template" class="select select-lg">
+          <option selected>WordPress</option>
+          <option>Laravel</option>
+          <option>Joomla</option>
+          <option>OrangeHRM</option>
+          <option>PrestaShop</option>
+          <option>Seo Panel</option>
+          <option>Blank</option>
+        </select>
+      </label>
+
+      <div class="collapse collapse-arrow bg-base-100 border border-base-300">
+        <input type="radio" name="accrdn-1" />
+        <div class="collapse-title font-semibold">Advanced Settings</div>
+        <div class="collapse-content text-sm space-y-6">
+          <div>
+            <label class="fieldset-label text-lg mb-2">Database</label>
+            <select name="database" class="select select-lg grow">
+              <option selected>Create New (Recommended)</option>
+              <option>existing-db-1</option>
+            </select>
+          </div>
+
+          <label class="input input-lg">
+            <span>Install Location</span>
+            <input name="location" class="grow" placeholder="/public_html/" />
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-soft btn-primary">Create</button>
+    </form>
+  </div>
+</div>

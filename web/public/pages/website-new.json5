@@ -15,13 +15,7 @@
       {
         "ele": "div",
         attrs: {class: "p-8"},
-        "content": ' \
-          <div class="space-y-4"> \
-            <h3 class="font-bold">New Website</h3> \
-            <div class="bg-base-200 p-6"> \
-              <span class="domain-name"></span> \
-            </div> \
-          </div>',
+        "content": "raw:components/website-new.html",
       }
     ]
   }
